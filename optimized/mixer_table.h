@@ -1,6 +1,6 @@
 #include <complex.h>
 
-#define MAXMIXTABLE 100
+#define MAXMIXTABLE (4*100)
 struct _mixer_table {
     int len;
     int actpos;
