@@ -3,25 +3,27 @@
 
 void mixer_init_rotate_float_vec(struct _mixer_rotate_float_vec *mixer_rotate_float, double freq, unsigned int samplerate) {
     double phase_radian = 2*M_PI*freq/samplerate;
-    mixer_rotate_float->osc_re[0] = 1. + 0.j;
+    mixer_rotate_float->osc_re[0] = cos(0*phase_radian);
     mixer_rotate_float->osc_re[1] = cos(1*phase_radian);
     mixer_rotate_float->osc_re[2] = cos(2*phase_radian);
     mixer_rotate_float->osc_re[3] = cos(3*phase_radian);
 
-    mixer_rotate_float->osc_im[0] = 0.;
+    mixer_rotate_float->osc_im[0] = sin(0*phase_radian);
     mixer_rotate_float->osc_im[1] = sin(1*phase_radian);
     mixer_rotate_float->osc_im[2] = sin(2*phase_radian);
     mixer_rotate_float->osc_im[3] = sin(3*phase_radian);
 
-    mixer_rotate_float->phase_re[0] = cos(4*phase_radian);
-    mixer_rotate_float->phase_re[1] = cos(4*phase_radian);
-    mixer_rotate_float->phase_re[2] = cos(4*phase_radian);
-    mixer_rotate_float->phase_re[3] = cos(4*phase_radian);
+    float phase_re = cos(4*phase_radian);
+    mixer_rotate_float->phase_re[0] = phase_re;
+    mixer_rotate_float->phase_re[1] = phase_re;
+    mixer_rotate_float->phase_re[2] = phase_re;
+    mixer_rotate_float->phase_re[3] = phase_re;
 
-    mixer_rotate_float->phase_im[0] = sin(4*phase_radian);
-    mixer_rotate_float->phase_im[1] = sin(4*phase_radian);
-    mixer_rotate_float->phase_im[2] = sin(4*phase_radian);
-    mixer_rotate_float->phase_im[3] = sin(4*phase_radian);
+    float phase_im = sin(4*phase_radian);
+    mixer_rotate_float->phase_im[0] = phase_im;
+    mixer_rotate_float->phase_im[1] = phase_im;
+    mixer_rotate_float->phase_im[2] = phase_im;
+    mixer_rotate_float->phase_im[3] = phase_im;
 }
 
 void mixer_mix_rotate_float_vec(struct _sample *sampleout, const struct _sample *samplein, struct _mixer_rotate_float_vec *mixer_rotate_float) {
