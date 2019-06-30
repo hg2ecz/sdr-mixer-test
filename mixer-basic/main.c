@@ -4,9 +4,6 @@
 #include "mixer_rotate.h"
 #include "mixer_table.h"
 
-#define SAMPLELEN (1000*1)
-#define ITERATION (1000*1000)
-
 //#define freq 100111
 #define freq 100000
 #define samplerate 2400000

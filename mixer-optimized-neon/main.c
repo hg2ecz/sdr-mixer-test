@@ -3,6 +3,7 @@
 
 #ifdef FLOATVECBENCH
 #  include "mixer_rotate_float_vec.h"
+#  include "mixer_table_vec.h"
 #endif
 
 #include "mixer_rotate_float.h"
@@ -73,4 +74,18 @@ int main() {
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &gend);   // end time
     eltime = gend.tv_sec - gstart.tv_sec + (gend.tv_nsec - gstart.tv_nsec)/(1000.*1000.*1000.);
     printf("\nMixer_table  speed: %.1f Msps\n", (double)ITERATION*4*SAMPLELEN4/(1000.*1000.)/eltime);
+
+#ifdef FLOATVECBENCH
+    // table bench vec
+    struct _mixer_table_vec  mixer_table_vec;
+    mixer_init_table_vec(&mixer_table_vec, freq, samplerate);
+
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &gstart); // start time
+    for (int i=0; i<ITERATION; i++) {
+        mixer_mix_table_vec(&sampleblockout, &sampleblockin, &mixer_table_vec);
+    }
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &gend);   // end time
+    eltime = gend.tv_sec - gstart.tv_sec + (gend.tv_nsec - gstart.tv_nsec)/(1000.*1000.*1000.);
+    printf("\nMixer_table_vec  speed: %.1f Msps\n", (double)ITERATION*4*SAMPLELEN4/(1000.*1000.)/eltime);
+#endif
 }

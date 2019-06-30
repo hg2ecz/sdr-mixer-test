@@ -1,5 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -Ofast -march=native -funroll-all-loops
+CFLAGS+=-DSAMPLELEN=100000 -DITERATION=10000
 CFLAGS+=-DFLOATBENCH
 LDFLAGS=-lm
 
