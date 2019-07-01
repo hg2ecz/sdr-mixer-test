@@ -147,8 +147,8 @@ int fastdecimator(struct _sample *sampleout, const struct _sample *samplein, str
         k++;
     }
     int pos = j;
-    memmove(ds->sample_re, &ds->sample_re[pos], &ds->sample_re[pos] - ds->sample_re);
-    memmove(ds->sample_im, &ds->sample_im[pos], &ds->sample_re[pos] - &ds->sample_re[pos]);
+    memmove(ds->sample_re, &ds->sample_re[pos], &ds->sample_re[ds->samplelen] - &ds->sample_re[pos]);
+    memmove(ds->sample_im, &ds->sample_im[pos], &ds->sample_im[ds->samplelen] - &ds->sample_im[pos]);
     ds->samplelen-=pos;
     sampleout->len = k;
     return 0;
