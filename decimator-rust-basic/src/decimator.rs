@@ -90,9 +90,13 @@ impl Decimator {
     pub fn decimator(&mut self, sample: &Vec<Complex<f32>>) -> Vec<Complex<f32>> {
         let mut resvec = vec![];
         if self.decimate > self.coeff.len() { return resvec; }
-        for i in 0..sample.len() {
-            self.sampledecimmixbuf.push( sample[i] * self.oscillator );
-            self.oscillator *= self.oscillator_phase;
+        if self.is_mix {
+            for i in 0..sample.len() {
+                self.sampledecimmixbuf.push( sample[i] * self.oscillator );
+                self.oscillator *= self.oscillator_phase;
+            }
+        } else {
+            self.sampledecimmixbuf.extend(sample);
         }
         let mut pos = 0;
         for i in (0..self.sampledecimmixbuf.len()-self.coeff.len()).step_by(self.decimate) {
