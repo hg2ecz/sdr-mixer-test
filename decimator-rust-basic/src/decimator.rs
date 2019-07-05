@@ -38,10 +38,11 @@ pub fn calc_coeff(cutoff_rate: f32, transition_bw: f32, window: Window) -> Vec<f
         firtaps[middle-i] = firtaps[middle+i];
         sum += firtaps[middle-i] + firtaps[middle+i];
     }
-    for i in 0..firtaps.len() {
-        firtaps[i] /= sum;
+    for f in &mut firtaps {
+        *f /= sum;
     }
-    return firtaps;
+
+    firtaps
 }
 
 // ---------------------------------------------------------------
@@ -65,11 +66,11 @@ impl Decimator {
         let coeff = calc_coeff(cutoff_rate, transition_bw, window);
 
         Decimator {
-             samplerate: samplerate,
+             samplerate,
              samplefirbuf: Vec::new(),
              sampledecimbuf: Vec::new(),
              sampledecimmixbuf: Vec::new(),
-             coeff: coeff,
+             coeff,
              decimate: decimfactor,
              is_mix: false,
              oscillator: Complex::new(1., 0.),
@@ -78,8 +79,8 @@ impl Decimator {
     }
 
     pub fn setfreq(&mut self, frequency: f64, phasereset: bool) {
-        self.is_mix = if frequency > 0. { true } else { false };
-        let fpsr: f32 = (-2. * std::f64::consts::PI * frequency / self.samplerate as f64) as f32;
+        self.is_mix = frequency > 0.;
+        let fpsr: f32 = (-2. * std::f64::consts::PI * frequency / f64::from(self.samplerate) ) as f32;
         self.oscillator_phase = Complex::new(fpsr.cos(), fpsr.sin());
         if phasereset {
             self.oscillator = Complex::new(1., 0.);
@@ -87,12 +88,12 @@ impl Decimator {
     }
 
     // mixer & decimate
-    pub fn decimator(&mut self, sample: &Vec<Complex<f32>>) -> Vec<Complex<f32>> {
+    pub fn decimator(&mut self, sample: &[Complex<f32>]) -> Vec<Complex<f32>> {
         let mut resvec = vec![];
         if self.decimate > self.coeff.len() { return resvec; }
         if self.is_mix {
-            for i in 0..sample.len() {
-                self.sampledecimmixbuf.push( sample[i] * self.oscillator );
+            for s in sample {
+                self.sampledecimmixbuf.push( s * self.oscillator );
                 self.oscillator *= self.oscillator_phase;
             }
         } else {
@@ -104,6 +105,7 @@ impl Decimator {
             pos=i;
         }
         self.sampledecimmixbuf.drain(..pos+self.decimate);
-        return resvec;
+
+        resvec
     }
 }
