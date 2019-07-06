@@ -101,7 +101,7 @@ impl Decimator {
         }
         let mut pos = 0;
         for i in (0..self.sampledecimmixbuf.len()-self.coeff.len()).step_by(self.decimate) {
-            resvec.push ( self.sampledecimmixbuf[i..i+self.coeff.len()].iter().zip(&self.coeff).map(|(sa, co)| sa * co).sum() );
+            resvec.push ( self.coeff.iter().zip(&self.sampledecimmixbuf[i..]).map(|(co, sa)| co * sa).sum() );
             pos=i;
         }
         self.sampledecimmixbuf.drain(..pos+self.decimate);
