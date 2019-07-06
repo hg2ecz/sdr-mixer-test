@@ -10,8 +10,8 @@ void mixer_init(struct _mixer *mixer, double freq, unsigned int samplerate) {
 }
 
 void mixer(complex float *sampleout, const complex float *samplein, struct _mixer *mixer, int samplelen) {
-    complex double       osc   = mixer->osc;             // register -> faster
-    const complex double phase = mixer->phase;           // register -> faster
+    osctype       osc   = mixer->osc;             // register -> faster
+    const osctype phase = mixer->phase;           // register -> faster
 
     for (int i=0; i<samplelen; i++) {
         sampleout[i] = samplein[i] * (complex float)osc; // mixing
@@ -71,7 +71,7 @@ int decimator_init(struct _decimstate *ds, unsigned int mixfreq, unsigned int sa
     ds->decimfactor = decimfactor;
     calc_coeff(ds, 1./decimfactor, transition_bw, window);
 
-    fprintf(stderr, "coefflen4: %d * 4\n", ds->coefflen);
+    fprintf(stderr, "coefflen4: %d\n", ds->coefflen);
     return 0;
 }
 

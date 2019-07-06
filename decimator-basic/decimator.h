@@ -6,11 +6,11 @@
 #define MAXCOEFFLEN 256
 #define MAXDECIM 100
 
+typedef complex float osctype;
+
 struct _mixer {
-//    complex double osc;
-//    complex double phase;
-    complex float osc;
-    complex float phase;
+    osctype osc;
+    osctype phase;
 };
 
 struct _decimstate {
